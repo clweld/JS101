@@ -1,0 +1,24 @@
+{
+  "en": {
+    "welcome": "Welcome to Calculator! Enter your name:",
+    "validName": "Make sure to enter a valid name.",
+    "firstNumber": "What's the first number?",
+    "secondNumber": "What's the second number?",
+    "validNumber": "Hmm... that doesn't look like a valid number.",
+    "whichOperation": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide",
+    "chooseOperation": "Must choose 1, 2, 3, or 4",
+    "result": "The result is: ",
+    "anotherOperation": "Would you like to perform another operation? Please enter y or n."
+  },
+  "es": {
+    "welcome": "¡Bienvenido a Calculadora! Introduzca su nombre",
+    "validName": "Asegúrese de ingresar un nombre válido.",
+    "firstNumber": "¿Cuál es el primer número?",
+    "secondNumber": "¿Cuál es el segundo número?",
+    "validNumber": "Hmm... eso no parece un número válido.",
+    "whichOperation": "¿Qué operación te gustaría realizar?\n1) Sumar 2) Restar 3) Multiplicar 4) Dividir",
+    "chooseOperation": "Debe elegir 1, 2, 3 o 4",
+    "result": "El resultado es: ",
+    "anotherOperation": "¿Le gustaría realizar otra operación? Por favor ingrese y o n."
+  }
+}
