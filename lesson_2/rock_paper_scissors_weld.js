@@ -9,8 +9,6 @@ const WINNING_PLAYS = {
 };
 const OUTCOME = ['win', 'lose', 'tie'];
 
-
-
 function prompt(message) {
   console.log(`=> ${message}`);
 }
@@ -103,7 +101,7 @@ while (true) {
 
   let userChoice = getUserChoice();
 
-  userChoice = invalidChoice(shortInput(userChoice));
+  userChoice = shortInput(userChoice);
 
   userChoice = invalidChoice(userChoice); // bug
 
@@ -122,3 +120,5 @@ while (true) {
     break;
   }
 }
+
+// git update test
