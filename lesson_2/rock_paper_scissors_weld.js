@@ -1,5 +1,6 @@
 const readline = require('readline-sync');
 const VALID_CHOICES = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+const VALID_REPLAY_ANSWERS = ['yes', 'no', 'y', 'n'];
 const WINNING_PLAYS = {
   scissors: ['paper', 'lizard'],
   paper: ['rock', 'spock'],
@@ -13,12 +14,29 @@ function prompt(message) {
   console.log(`=> ${message}`);
 }
 
+function clearConsole() {
+  console.clear();
+}
+
+function welcome() {
+  prompt('Welcome!');
+}
+
 function startGame() {
   prompt("Let's play a game of Rock, Paper, Scissors, Lizard, Spock!");
 }
 
+function displayRules() {
+  prompt('You vs Computer: first to 3 points wins.');
+}
+
 function lineBreak() {
   console.log('----------------------------------------------------');
+}
+
+function resetGame() {
+  userScore = 0;
+  compScore = 0;
 }
 
 function getUserChoice() {
@@ -41,13 +59,13 @@ function shortInput(userChoice) {
     case 'sp':
       return 'spock';
   }
-  return userChoice;
 }
 
 function invalidChoice(userChoice) {
   while (!VALID_CHOICES.includes(userChoice)) {
     prompt('That is not a valid choice, try again.');
-    userChoice = readline.question();
+    userChoice = readline.question().toLowerCase();
+    userChoice = shortInput(userChoice);
   }
   return userChoice;
 }
@@ -62,67 +80,121 @@ function displayChoices(userChoice, computerChoice) {
   prompt(`You chose ${userChoice} and the computer chose ${computerChoice}.`);
 }
 
-function determineWinner(userChoice, computerChoice) {
+function determineOutcome(userChoice, computerChoice) {
   if (WINNING_PLAYS[userChoice].includes(computerChoice)) {
-    prompt(`You ${OUTCOME[0]}! :)`);
     return OUTCOME[0];
   } else if (WINNING_PLAYS[computerChoice].includes(userChoice)) {
-    prompt(`You ${OUTCOME[1]}! :(`);
     return OUTCOME[1];
   } else {
-    prompt(`It's a ${OUTCOME[2]}! :|`);
     return OUTCOME[2];
   }
 }
 
-function incrementWins() {
-  // not finished with part 3
-}
-
-function playAgain(answer) {
-  prompt('Would you like to play again? (y/n)');
-  answer = readline.question();
-  return answer;
-}
-
-function invalidAnswer(answer) {
-  while (answer.trimStart() === ''        ||
-        (answer[0].toLowerCase() !== 'y' &&
-         answer[0].toLowerCase() !== 'n')) {
-    prompt('Please enter "y" or "n".');
-    answer = readline.question().toLowerCase();
+function displayOutcome(outcome) {
+  if (outcome === OUTCOME[0]) {
+    prompt(`You ${OUTCOME[0]}! :)`);
+  } else if (outcome === OUTCOME[1]) {
+    prompt(`You ${OUTCOME[1]}! :(`);
+  } else {
+    prompt(`It's a ${OUTCOME[2]}! :|`);
   }
 }
 
+function incrementScore(outcome) {
+  if (outcome === OUTCOME[0]) {
+    userScore += 1;
+  } else if (outcome === OUTCOME[1]) {
+    compScore += 1;
+  }
+}
+
+function displayScore(userScore, compScore) {
+  prompt(`Your score: ${userScore} points\nComputer score: ${compScore} points`);
+}
+
+function displayWinner(userScore, compScore, winningScore) {
+  if (userScore === winningScore) {
+    prompt('You win the game!');
+  } else if (compScore === winningScore) {
+    prompt('Computer wins the game!');
+  }
+  return true;
+}
+
+function keepPlaying(userScore, compScore, winningScore) {
+  if (userScore < winningScore && compScore < winningScore) {
+    return true;
+  }
+}
+
+function getPlayAgain() {
+  prompt('Would you like to play again? (yes/no) or (y/n)');
+  let answer = readline.question().toLowerCase();
+  return answer;
+}
+
+function invalidPlayAgain(answer) {
+  while (!VALID_REPLAY_ANSWERS.includes(answer)) {
+    prompt('Please enter a valid response.');
+    answer = readline.question().toLowerCase();
+  }
+  return answer;
+}
+
 function endGame(answer) {
-  if (answer[0] === 'n') {
+  if (answer === 'n' || answer === 'no') {
     prompt('Thanks for playing!');
     return true;
   }
 }
 
 
-startGame();
+// Start Program
+
+let winningScore = 3;
+let userScore = 0;
+let compScore = 0;
 
 while (true) {
 
+  clearConsole();
+
+  welcome();
+
+  startGame();
+
+  displayRules();
+
   lineBreak();
 
-  let userChoice = getUserChoice();
+  resetGame();
 
-  userChoice = shortInput(userChoice);
+  while (keepPlaying(userScore, compScore, winningScore)) {
 
-  userChoice = invalidChoice(userChoice);
+    let userChoice = getUserChoice();
 
-  let computerChoice = getCompChoice();
+    userChoice = invalidChoice(shortInput(userChoice));
 
-  displayChoices(userChoice, computerChoice);
+    let computerChoice = getCompChoice();
 
-  determineWinner(userChoice, computerChoice);
+    displayChoices(userChoice, computerChoice);
 
-  let answer = playAgain();
+    let outcome = determineOutcome(userChoice, computerChoice);
 
-  invalidAnswer(answer);
+    displayOutcome(outcome);
+
+    incrementScore(outcome);
+
+    displayScore(userScore, compScore);
+
+    lineBreak();
+  }
+
+  displayWinner(userScore, compScore, winningScore);
+
+  let answer = getPlayAgain();
+
+  invalidPlayAgain(answer);
 
   if (endGame(answer)) {
     break;
